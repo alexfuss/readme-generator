@@ -1,0 +1,25 @@
+{
+  "name": "readme-generator",
+  "version": "1.0.0",
+  "description": "A command line application meant to help a user generate a good README.md file.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alexfuss/readme-generator.git"
+  },
+  "keywords": [
+    "readme"
+  ],
+  "author": "Alex Fuss",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/alexfuss/readme-generator/issues"
+  },
+  "homepage": "https://github.com/alexfuss/readme-generator#readme",
+  "dependencies": {
+    "inquirer": "^6.3.1"
+  }
+}
