@@ -77,7 +77,7 @@ async function readMe() {
     const projectInstructions = questions.instructions;
     const projectExample = questions.whenToUse;
     const license = questions.licenseName;
-    const licenseURL = questions.licenseURL;
+    const licenseUrl = questions.licenseURL;
     const contributorNames = questions.gitContributor;
     const tests = questions.testing;
 
@@ -85,20 +85,69 @@ async function readMe() {
     const gitResponse = await axios.get(`https://api.github.com/users/${gitUsername}`);
     console.log(gitResponse);
 
+    // Organize and declare the data being pulled from GitHub
+    const gitData = gitResponse.data;
+    const gitName = gitData.login;
+    const gitEmail = gitData.email;
+    const gitlocation = gitData.locaiton;
+    const gitUrl = gitData.html_url;
+    const gitProfileImg = gitData.avatar_url;
 
-    
+    // Pull the contributor name list in an Array
+    const contributorNameArray = contributorNames.split(",");
+    console.log(contributorNameArray);
+
+    // Loop through the entire Contributor Array
+    var resultContArray;
+    for (i = 0; i < contributorNameArray.length; i++) {
+        let gitUserCont = contributorNameArray[i]
+        const secondGitResponse = await axios.get(`https://api.github.com/users/${gitUserCont}`);
+        let contImg = secondGitResponse.data.avatar_url;
+        let contUrl = secondGitResponse.data.html_url;
+        let contEmail = secondGitResponse.data.email;
+
+        // Add the Contributors to the page
+        var resultContArray = resultContArray + (`
+        \n <img src="${contImg}" alt="drawing" width="150" display="inline"/> ${contEmail}  GitHubLink: ${contUrl}`);
+    }
+
+    // Create the blueprint of the ReadMe file - Template literals
+    let finalReadMe = (`
+            # ${projectTitle} 
+            ${projectDescription}
+            \n* [Installation](#Installation)
+            \n* [Instructions](#Instructions)
+            \n* [License](#License)
+            \n* [Contributors](#Contributors)
+            \n* [Author](#Author)
+            \n* [Tests](#Tests)
+            ## Installation
+            ${installation}
+            ## Instructions
+            ${projectInstructions}
+            \`\`\`
+            ${projectExample}
+            \`\`\`
+            ## License 
+            This project is licensed under the ${license} - see the ${licenseUrl} file for details
+            ## Contributors
+            ${resultContArray}
+            ## Tests
+            ${tests}
+            ## Author 
+            \n![ProfileImage](${gitProfileImg})
+            \n**${gitName}**
+            \nEmail: ${gitEmail}
+            \nLocation:${gitlocation}
+            \nGitHub: ${gitUrl}
+            `
+    )
+
+    // Write the file using the path package
+    let writeFile = fs.writeFileSync(path.join(__dirname,'../readme-generator', 'readMe.md'), finalReadMe)
+    console.log("File generated.")
+
 };
 
 readMe();
 
-// function to write README file
-// function writeToFile(fileName, data) {
-// }
-
-// function to initialize program
-// function init() {
-
-// }
-
-// function call to initialize program
-// init();
